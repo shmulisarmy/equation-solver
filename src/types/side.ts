@@ -8,6 +8,7 @@ export type Side = {
 //   varible_value: null|number,
 //   variable_letter: string|null,
 //   product: null|number,
+  subExpression?: Omit<Side, "side">,
   coefficient: number,
   side: "right" | "left",
   variable: Variable | null

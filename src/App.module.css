@@ -5,6 +5,7 @@
   min-height:10vh;
   background-color: #1a1a1a;
   color: #ffffff;
+  --info-color: #ff8e8e;
 }
 
 span {
@@ -38,10 +39,12 @@ span button {
   transition: all 0.2s ease-in-out;
 }
 
-span:hover button {
+span:focus{
+  background-color: darkcyan;
+  button {
   opacity: 1;
   visibility: visible;
-}
+}}
 
 
 span{
@@ -58,7 +61,6 @@ form{
 }
 
 .controls{
-      margin: 4px;
       padding: 10px;
       background-color: var(--background-color);
       color: var(--color);
@@ -82,3 +84,146 @@ button:disabled{
   opacity: .5;
 } 
  
+
+
+
+
+.diolog{
+  max-width: 800px;
+      margin: 4px;
+      padding: 10px;
+      background-color: rgb(203, 137, 16);
+      border: 2px solid darkred;
+
+      transition: color .4s;
+      
+
+
+      button{
+            margin: 4px;
+            padding: 4px;
+            background-color: black;
+
+            color: white;
+            transition: color .4s;
+            border-radius: 10px;
+            cursor: pointer;
+      }
+}
+
+
+#forms{
+      margin-top: 20px;
+      padding: 10px;
+      background-color: black;
+      color: white;
+      transition: color .4s;
+}
+
+
+#info{
+      margin-top: 20px;
+      padding: 10px;
+      background-color: black;
+      color: white;
+      transition: color .4s;
+}
+
+
+
+
+
+
+
+
+
+
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+/* 
+.diolog {
+  background: #e3f2fd;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+} */
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+
+span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 18px;
+}
+
+button {
+  background: lightgreen;
+  
+  color: black;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: #0277bd;
+}
+
+button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+input[type="number"] {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.control {
+  padding: 10px 15px;
+  font-size: 16px;
+}
+
+
+
+@keyframes press {
+  50% {
+    transform: scale(1.1);
+    background-color: blue;
+  }
+}
+
+.animate-press {
+  animation: press 1s ease-in-out;
+}
