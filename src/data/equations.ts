@@ -90,6 +90,21 @@ export const equations: { rhs: Side; lhs: Side; difficulty: "super easy" | "easy
       side: "right"
     }
   },
+  {
+    difficulty: "medium",
+    lhs: {
+      variable: {value: -4,
+      letter: "a",
+      product: -3,},
+      coefficient: 2,
+      side: "left"
+    },
+    rhs: {
+      variable: null,
+      coefficient: 14,
+      side: "right"
+    }
+  },
  
   {
     difficulty: "hard",
@@ -97,13 +112,13 @@ export const equations: { rhs: Side; lhs: Side; difficulty: "super easy" | "easy
       
       variable: {value: 4,
       letter: "y",
-      product: 3},
+      product: 5},
       coefficient: 5,
       side: "left"
     },
     rhs: {
       variable: null,
-      coefficient: 3,
+      coefficient: 2,
       side: "right",
       subExpression: {
         product: 2,
@@ -123,19 +138,5 @@ export const equations: { rhs: Side; lhs: Side; difficulty: "super easy" | "easy
         },
     }
   },
-  {
-    difficulty: "medium",
-    lhs: {
-      variable: {value: -4,
-      letter: "a",
-      product: -3,},
-      coefficient: 2,
-      side: "left"
-    },
-    rhs: {
-      variable: null,
-      coefficient: 14,
-      side: "right"
-    }
-  },
+
 ];

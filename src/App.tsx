@@ -226,8 +226,10 @@ function breakSubExpression(side: Side){
 function breakSubExpressionByMapping(side: Side){
   console.log(side)
   if (!side.subExpression)return
-  side.variable=copyObject(side.subExpression!.variable)
-  side.variable!.product*=side.subExpression.product
+  if (!side.variable){
+    side.variable = {letter: side.subExpression.variable!.letter, product: 0}
+  }
+  side.variable!.product+=side.subExpression.variable!.product*=side.subExpression.product
   side.coefficient += side.subExpression.coefficient*side.subExpression.product
 
   delete side.subExpression 
