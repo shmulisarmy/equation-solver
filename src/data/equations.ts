@@ -140,3 +140,16 @@ export const equations: { rhs: Side; lhs: Side; difficulty: "super easy" | "easy
   },
 
 ];
+export function equals_neither(a: number, ...b: number[]){
+  return !(b.some(e => e == a))
+}
+
+
+export function needsDivision(equation: Equation){
+  const there_is_subExpression = equation.lhs.subExpression || equation.rhs.subExpression
+  const left_variable_product_needs_division = equation.lhs.variable?.product && equals_neither(equation.lhs.variable?.product, 0, 1, -1)
+  const right_variable_product_needs_division = equation.rhs.variable?.product && equals_neither(equation.rhs.variable?.product, 0, 1, -1)
+  const there_is_a_big_variable_product = left_variable_product_needs_division || right_variable_product_needs_division
+
+  return there_is_subExpression || there_is_a_big_variable_product
+}

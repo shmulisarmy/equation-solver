@@ -1,7 +1,7 @@
-import { createEffect, createSignal, Show } from "solid-js"
+import { createEffect, createSignal, JSX, Show } from "solid-js"
 import { createMutable, StoreNode } from "solid-js/store"
 import styles from "./App.module.css"
-import { equations } from "./data/equations"
+import { equations, needsDivision } from "./data/equations"
 import { PartialRefactor, Side, Variable } from "./types/side"
 import { FocusSpan } from "./components/FocusSpan"
 import { objCopy } from "./utils/objCopy"
@@ -12,7 +12,6 @@ import { UndoArrow } from "./components"
 const state: {currentEquation_id: number, currentEquation: {rhs: Side, lhs: Side}|null, previousPositions: {lhs: Side, rhs: Side}[]} = createMutable({currentEquation_id: 0, currentEquation: null, previousPositions: []})
 
 
-createEffect(() => {state.currentEquation = createMutable(objCopy(equations[state.currentEquation_id]))})
 
 
 function Equation_Side_C(props: {side: Side}){
@@ -236,7 +235,6 @@ function breakSubExpressionByMapping(side: Side){
 }
 
 
-function copyObject(obj: any){return JSON.parse(JSON.stringify(obj))}
 
 
 function DiologDisplay(props: {diolog: string[]}){
@@ -255,7 +253,7 @@ function DiologDisplay(props: {diolog: string[]}){
 
 
 
-export default function App(){
+function QuestionDisplay(){
   let divideInputRef: undefined|HTMLInputElement = undefined
   let timesInputRef: undefined|HTMLInputElement = undefined
   return(
@@ -273,6 +271,8 @@ export default function App(){
   </div>    
 
 
+  <Show when={needsDivision(state.currentEquation)}>
+
   <div id={styles.forms}>
 
   <form onsubmit={e => e.preventDefault()}>
@@ -284,6 +284,7 @@ export default function App(){
     <button onclick={() => {saveCurrentEquationPosition(); timesEntireSide(state.currentEquation!.lhs, parseInt(timesInputRef!.value)); timesEntireSide(state.currentEquation!.rhs, parseInt(timesInputRef!.value))}}>submit</button>
     </form>
   </div>
+      </Show>
     <InfoDisplay/>
     <div class={styles.controls}>
       <button plain-action="ArrowLeft" disabled={state.currentEquation_id < 1} class={styles.control} onclick={() => state.currentEquation_id--}>previous question (press ←)</button>
@@ -316,6 +317,33 @@ window.addEventListener("keydown", (e) => {
 
 })
 
+
+const [ph, setPh] = createSignal(true)
+
+createEffect(() => {
+  state.currentEquation = createMutable(
+    objCopy(equations[state.currentEquation_id])
+  );
+  setPh(prev => !prev)
+  setPh(prev => !prev)
+  state.previousPositions = []
+});
+
+
+export default function App(){
+  return(
+    <>
+    {ph() && QuestionDisplay()}
+    </>
+  )
+}
+
+
+function ReactStyleComponent({children}: {children: () => JSX.Element}){
+  return(
+    children()
+  )
+}
 
 
 function InfoDisplay(){
