@@ -1,3 +1,7 @@
+import { userState } from "../userState";
+import { getDeviceType } from "../utils/Device";
+import styles from "./.module.css";
+
 export function UndoArrow(){
     return(
       <svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
@@ -13,3 +17,27 @@ export function UndoArrow(){
   </svg>
     )
   }
+export function ArrowBoxSVG() {
+  const away_from_left: number = 50
+  return (
+
+
+
+    <svg  id={styles.arrow_box} width="360" height="240" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrowhead" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <polygon points="0,0 6,3 0,6" fill="white" />
+        </marker>
+      </defs>
+
+      <rect class={styles["text-box"]} x={`${away_from_left}%`} y="20%" width="70%" height="35%" stroke="black" fill="lightgray" stroke-width="2" />
+
+      <text x={`${away_from_left+5}%`} y="35%" font-family="Arial" font-size="12" fill="black">{getDeviceType() == "mobile" ? "tap" : "hover"} to see options</text>
+
+      <text x={`${away_from_left+5}%`} y="45%" font-family="Arial" font-size="12" fill="black">(to isolate x)</text>
+
+      <line x1={`${away_from_left+30}%`} y1="55%" x2="110%" y2="100%" stroke="lightgray" stroke-width="2" marker-end="url(#arrowhead)" />
+    </svg>
+
+  )
+}

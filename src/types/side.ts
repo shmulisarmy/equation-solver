@@ -11,7 +11,9 @@ export type Side = {
   subExpression?: Omit<Side, "side">,
   coefficient: number,
   side: "right" | "left",
-  variable: Variable | null
+  variable: Variable | null,
+  squared?: Omit<Side, "side">,
+  squareRoot?: Omit<Side, "side">
 }
 export type PartialRefactor = {
   numberType: "coefficient" | "product" | "variable"
