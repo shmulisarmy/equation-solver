@@ -1,0 +1,20 @@
+.wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    font-size: 20px;
+    font-family: Arial, sans-serif;
+    transform: scale(.9);
+  }
+  
+  .rootSymbol {
+    transform: scaleX(2.5);
+    font-size: 24px;
+    /* padding-right: 2px; */
+  }
+  
+  .content {
+    border-top: 2px solid white;
+    padding-top: 4px;
+  }
+  

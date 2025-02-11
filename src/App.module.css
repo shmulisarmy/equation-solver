@@ -13,6 +13,9 @@
 
 .past-expression {
   color: #ccc;
+  span::after{
+    display: none;
+  }
 }
 
 span {
@@ -52,6 +55,8 @@ span .controls {
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 }
+
+
 
 span:focus{
   background-color: darkcyan;

@@ -159,7 +159,7 @@ export const equations: Equation_T[] = [
       difficulty: "hard",
       diolog: ["assuming that the math statement 'x + 1 = 5' is correct, then find the value of x, for example we know x is not equal to 2 because 2 + 1 is not equal to 5 and would there for make this statement not true", "in order to help figure out the value of x we will try to get x to be by itself (on the left side) by getting rid of the +1 so that way the equation will read as 'x = ...'", "as you can see under the +1 is a pink line wich when you hover over it will help you get rid of the +1 to get the desired 'x = ..."],
       lhs: {
-          coefficient: 1,
+          coefficient: 5,
           side: "left",
           variable: {value: 13,
             letter: "x",

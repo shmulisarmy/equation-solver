@@ -1,0 +1,16 @@
+.expression {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    font-size: 20px;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .superscript {
+    font-size: 12px;
+    vertical-align: super;
+    transform: translateY(-8px);
+  }
+  

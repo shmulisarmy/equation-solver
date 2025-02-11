@@ -1,4 +1,4 @@
-import { createEffect, createSignal, For, JSX, Show } from "solid-js";
+import { createEffect, createSignal, For, JSX, onCleanup, Show } from "solid-js";
 import { createMutable } from "solid-js/store";
 import styles from "./App.module.css";
 import { distanceToAnswer, equations, needsDivision } from "./data/equations";
@@ -20,6 +20,12 @@ import { timesBothSides } from "./actions/timesBothSides";
 import Slider from "./components/Slider";
 import { squareBothSides, squareRootBothSides } from "./actions/squaring";
 import { userState } from "./userState";
+import { side_only_contains_squareRoot } from "./insights/side_only_contains_squareRoot";
+import { getDeviceType } from "./utils/Device";
+import { minusFromBothSides } from "./actions/minusFromBothSides";
+import { Portal } from "solid-js/web";
+import SquaredDisplay from "./components/MathExpression";
+import SquareRootDisplay from "./components/SquareRootDisplay";
 
 function Equation_Side_C(props: { side: Side }) {
   return <Expression isFullSide={true} side={() => props.side} />;
@@ -36,69 +42,11 @@ function PastExpressionSideDisplay({
   isFullSide: boolean;
   side: () => Side;
 }) {
-  function Variable_C() {
-    return (
-      <>
-        <Show when={side().variable! && side().variable!.product != 0}>
-          <Show
-            when={!shouldDisplayInReverse(side().variable?.product!)}
-            fallback={
-              <span>
-                {side().variable?.letter + "/" + 1 / side().variable?.product!}
-              </span>
-            }
-          >
-            {side().variable!.product != 1 && side().variable!.product}
-            {side().variable!.letter}
-          </Show>
-        </Show>
-      </>
-    );
-  }
-
-  function Coefficient_C() {
-    return (
-      <>
-        <Show when={side().coefficient}>
-          {side().coefficient > 0 && side().variable && side().variable!.product
-            ? "+ "
-            : ""}
-          <div class={styles["arrow-box-parent"]}>{side().coefficient}</div>
-        </Show>
-        <Show
-          when={
-            side().coefficient == 0 &&
-            !(side().variable && side().variable!.product)
-          }
-        >
-          0
-        </Show>
-      </>
-    );
-  }
-
   return (
     <>
-      <Variable_C />
-      <Coefficient_C />
-      <Show when={side().subExpression}>
-        + {side().subExpression.product}(
-        <Expression side={() => side().subExpression} />)
-        {/* <span style={{background: "pink"}}>
-
-{JSON.stringify(side())}
-</span> */}
-      </Show>
+      <Expression isFullSide={false} side={() => side()} />
     </>
-  );
-}
-
-function minusFromBothSides(
-  currentEquation: { lhs: Side; rhs: Side },
-  amount: number
-) {
-  currentEquation.lhs.coefficient -= amount;
-  currentEquation.rhs.coefficient -= amount;
+  )
 }
 
 function Expression({
@@ -111,7 +59,6 @@ function Expression({
   function Variable_C() {
     return (
       <>
-        <Show when={side().variable! && side().variable!.product != 0}>
           <FocusSpan>
             <Show
               when={!shouldDisplayInReverse(side().variable?.product!)}
@@ -200,40 +147,60 @@ function Expression({
               </div>
             </Show>
           </FocusSpan>
-        </Show>
 
-        <Show when={side().squareRoot}>
-          <FocusSpan>
-            squareRoot of (
-            <Expression side={() => side().squareRoot!} isFullSide={false} />) +
-            <div class={styles.controls}>
-              <button onclick={() => squareBothSides(state.currentEquation!)}>
-                square both sides
-              </button>
-            </div>
-          </FocusSpan>
-        </Show>
-        <Show when={side().squared}>
-          <FocusSpan>
-            (<Expression side={() => side().squareRoot!} isFullSide={false} />)
-            squared +
-            <div class={styles.controls}>
-              <button
-                onclick={() => squareRootBothSides(state.currentEquation!)}
-              >
-                square root both sides
-              </button>
-            </div>
-          </FocusSpan>
-        </Show>
+        
+        
       </>
     );
+  }
+
+  let message_ids = 0
+  function doIf<T>(e: T, f: (e: T) => void) {
+    if (e) f(e)
+  }
+
+  function UserMessage(props: { message: string, when?: boolean }) {
+    return (
+      <Show when={props.when}>
+      <Portal mount={document.querySelector("#messages")!}>
+
+        <p >{props.message}</p>
+      </Portal>
+      </Show>
+    );
+  }
+
+
+  function SquareRootSection(){
+    return(
+          <FocusSpan>
+            <SquareRootDisplay>
+            <Expression side={() => side().squareRoot!} isFullSide={false} />
+              </SquareRootDisplay>
+             
+            <Show when={
+              side_only_contains_squareRoot(side())}
+              
+              
+            >
+              <div class={styles.controls}>
+                <button onclick={() => {
+                  saveCurrentEquationPosition();
+                  squareBothSides(state.currentEquation!)}
+                }>
+                  square both sides
+                </button>
+              </div>
+            </Show>
+            <UserMessage message="once the square root expression is isolated you can square both sides" when={!side_only_contains_squareRoot(side())} />
+
+          </FocusSpan>
+    )
   }
 
   function Coefficient_C() {
     return (
       <>
-        <Show when={side().coefficient}>
           <FocusSpan>
             {side().coefficient > 0 &&
             side().variable &&
@@ -248,10 +215,12 @@ function Expression({
             >
               {side().coefficient}
               <Show when={!userState.hasHovered && side().variable}>
-                <ArrowBoxSVG />
+                <ArrowBoxSVG
+                  message={`${getDeviceType() == "mobile" ? "tap" : "hover"} to see options`}
+                />
               </Show>
             </div>
-            <Show when={isFullSide && side().variable}>
+            <Show when={isFullSide && (side().variable || side().squareRoot)}>
               <div class={styles.controls}>
                 <button
                   onclick={function () {
@@ -272,23 +241,68 @@ function Expression({
               </div>
             </Show>
           </FocusSpan>
-        </Show>
-        <Show
-          when={
-            side().coefficient == 0 &&
-            !(side().variable && side().variable!.product)
-          }
-        >
-          0
-        </Show>
+
+        
       </>
     );
   }
 
+  function side_only_contains_squared(side: Side){
+    return Object.keys(side).every((key) => !(!(["squared", "side"].includes(key)) && side[key])) 
+  }
+
+
+  function SquaredSection(){
+    return(
+      <FocusSpan>
+        <SquaredDisplay>
+            <Expression side={() => side().squared!} isFullSide={false} />
+            </SquaredDisplay>
+             
+            <div class={styles.controls}>
+              <Show when={side_only_contains_squared(side())}>
+
+              <button
+                onclick={() => {
+                  saveCurrentEquationPosition();
+                  squareRootBothSides(state.currentEquation!)}
+                }
+                >
+                square root both sides
+              </button>
+                </Show>
+            </div>
+          </FocusSpan>
+    )
+  }
+
   return (
-    <>
+    <Show when={side()}>
+        <Show when={side().variable! && side().variable!.product != 0}>
+
       <Variable_C />
-      <Coefficient_C />
+      </Show>
+      <Show when={side().squareRoot}>
+        <SquareRootSection />
+      </Show>
+      <Show when={side().squareRoot && side().coefficient}>+</Show>
+      <Show when={side().coefficient}>
+        <Coefficient_C />
+      </Show>
+      <Show when={side().squared}>
+      <SquaredSection />
+        </Show>
+      <Show
+        when={
+          side().coefficient == 0 &&
+          !(side().variable && side().variable!.product) &&
+          !side().squareRoot &&
+          !side().squared
+        }
+      >
+        0
+      </Show>
+      
       <Show when={side().subExpression}>
         <FocusSpan>
           + {side().subExpression.product}(
@@ -309,7 +323,7 @@ function Expression({
           </div>
         </FocusSpan>
       </Show>
-    </>
+    </Show>
   );
 }
 
@@ -445,9 +459,9 @@ function QuestionDisplay() {
         >
           previous question (press ←)
         </button>
-        {/* <button class={styles.control} onclick={() => {state.currentEquation_id++; state.currentEquation_id--}}>
-      <ReStartIcon/>
-      </button> */}
+        <button class={styles.control} onclick={() => {state.currentEquation_id++; state.currentEquation_id--}}>
+      restart question
+      </button>
         <button
           plain-action="ArrowRight"
           disabled={state.currentEquation_id > equations.length - 2}
@@ -486,6 +500,8 @@ export default function App() {
         <h1>moves from the answer: </h1>
         <Slider value={() => distanceToAnswer(state.currentEquation!)} />
       </div>
+
+      {/* <pre style={{ width: "800px" }}>{JSON.stringify(state.currentEquation, undefined, 2)}</pre> */}
       {ph() && QuestionDisplay()}
     </>
   );
