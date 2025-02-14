@@ -11,16 +11,29 @@ export function distanceToAnswer(equation: Equation_T) {
   let right_side_distance = 0
   let there_is_extra_variable = false
   let both_sides_have_a_coefficient = false
-  if (equation.lhs.variable && equation.lhs.variable.product != 1) {
+  if (equation.lhs.variable && ![0, 1].includes(equation.lhs.variable.product)) {
     left_side_distance += 1
   }
 
 
-  if (equation.rhs.variable && equation.rhs.variable.product != 1) {
+  if (equation.lhs.squareRoot) {
+    left_side_distance += 1
+    if (equation.lhs.squareRoot.coefficient) {
+      left_side_distance += 1
+    }
+  }
+  if (equation.rhs.squareRoot) {
+    left_side_distance += 1
+    if (equation.rhs.squareRoot.coefficient) {
+      left_side_distance += 1
+    }
+  }
+
+  if (equation.rhs.variable && ![0, 1].includes(equation.rhs.variable.product)) {
     right_side_distance += 1
   }
 
-  if (equation.lhs.coefficient && equation.lhs.coefficient) {
+  if (equation.lhs.coefficient && equation.rhs.coefficient) {
     both_sides_have_a_coefficient = true
   }
 
@@ -43,11 +56,13 @@ type Side = {
 
 
 
-type Equation_T = {
+export type Equation_T = {
   rhs: Side;
   lhs: Side;
   difficulty: "super easy" | "easy" | "medium" | "hard";
   diolog?: string[];
+  fastest_route_to_answer: number
+
 };
 
 export const equations: Equation_T[] = [
@@ -56,6 +71,7 @@ export const equations: Equation_T[] = [
   {
     difficulty: "super easy",
     diolog: ["assuming that the math statement 'x + 1 = 5' is correct, then find the value of x, for example we know x is not equal to 2 because 2 + 1 is not equal to 5 and would there for make this statement not true", "in order to help figure out the value of x we will try to get x to be by itself (on the left side) by getting rid of the +1 so that way the equation will read as 'x = ...'", "as you can see under the +1 is a pink line wich when you hover over it will help you get rid of the +1 to get the desired 'x = ..."],
+    fastest_route_to_answer: 1,
     lhs: {
       variable: {value: 4,
         letter: "x",
@@ -73,6 +89,7 @@ export const equations: Equation_T[] = [
     {
       difficulty: "super easy",
       diolog: ["assuming that the math statement 'x + 1 = 5' is correct, then find the value of x, for example we know x is not equal to 2 because 2 + 1 is not equal to 5 and would there for make this statement not true", "in order to help figure out the value of x we will try to get x to be by itself (on the left side) by getting rid of the +1 so that way the equation will read as 'x = ...'", "as you can see under the +1 is a pink line wich when you hover over it will help you get rid of the +1 to get the desired 'x = ..."],
+      fastest_route_to_answer: 1,
       lhs: {
         variable: {value: 12,
           letter: "x",
@@ -89,6 +106,7 @@ export const equations: Equation_T[] = [
       {
         difficulty: "super easy",
         diolog: ["assuming that the math statement 'x + 1 = 5' is correct, then find the value of x, for example we know x is not equal to 2 because 2 + 1 is not equal to 5 and would there for make this statement not true", "in order to help figure out the value of x we will try to get x to be by itself (on the left side) by getting rid of the +1 so that way the equation will read as 'x = ...'", "as you can see under the +1 is a pink line wich when you hover over it will help you get rid of the +1 to get the desired 'x = ..."],
+        fastest_route_to_answer: 1,
         lhs: {
           variable: {value: -2,
             letter: "x",
@@ -105,6 +123,7 @@ export const equations: Equation_T[] = [
     
     {
     diolog: ["for this equation we will first get rid of the +3 using the same tactic from before, once you do that the equation will read as '3x = ...' wich you can then devide 3x by 3 to get 'x = ...'"],
+    fastest_route_to_answer: 1,
     difficulty: "easy",
     lhs: {
       variable: {value: 4,
@@ -122,6 +141,7 @@ export const equations: Equation_T[] = [
   
   {
     difficulty: "medium",
+    fastest_route_to_answer: 1,
     lhs: {
       variable: {value: 7,
       letter: "x",
@@ -138,6 +158,7 @@ export const equations: Equation_T[] = [
   {
     difficulty: "hard",
     diolog: ["assuming that the math statement 'x + 1 = 5' is correct, then find the value of x, for example we know x is not equal to 2 because 2 + 1 is not equal to 5 and would there for make this statement not true", "in order to help figure out the value of x we will try to get x to be by itself (on the left side) by getting rid of the +1 so that way the equation will read as 'x = ...'", "as you can see under the +1 is a pink line wich when you hover over it will help you get rid of the +1 to get the desired 'x = ..."],
+    fastest_route_to_answer: 2,
     lhs: {
       variable: null,
         coefficient: 1,
@@ -157,6 +178,7 @@ export const equations: Equation_T[] = [
     },
     {
       difficulty: "hard",
+      fastest_route_to_answer: 2,
       diolog: ["assuming that the math statement 'x + 1 = 5' is correct, then find the value of x, for example we know x is not equal to 2 because 2 + 1 is not equal to 5 and would there for make this statement not true", "in order to help figure out the value of x we will try to get x to be by itself (on the left side) by getting rid of the +1 so that way the equation will read as 'x = ...'", "as you can see under the +1 is a pink line wich when you hover over it will help you get rid of the +1 to get the desired 'x = ..."],
       lhs: {
           coefficient: 5,
@@ -179,6 +201,7 @@ export const equations: Equation_T[] = [
       },
   {
     diolog: ["this is starting to get harder because now there is an x of either side, however we can apply the same tactic we used before to get rid of the regular numbers and this time use it to get rid of the 2x on the right side"],
+    fastest_route_to_answer: 2,
     difficulty: "medium",
     lhs: {
       variable: {value: 2,
@@ -197,6 +220,7 @@ export const equations: Equation_T[] = [
   },
   {
     difficulty: "medium",
+    fastest_route_to_answer: 3,
     lhs: {
       variable: {value: -3,
       letter: "a",
@@ -212,6 +236,7 @@ export const equations: Equation_T[] = [
   },
   {
     difficulty: "medium",
+    fastest_route_to_answer: 3,
     lhs: {
       variable: {value: -4,
       letter: "a",

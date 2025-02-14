@@ -1,4 +1,4 @@
-import { createEffect, createSignal, For, JSX, onCleanup, Show } from "solid-js";
+import { createEffect, createSignal, For, onCleanup, Show } from "solid-js";
 import { createMutable } from "solid-js/store";
 import styles from "./App.module.css";
 import { distanceToAnswer, equations, needsDivision } from "./data/equations";
@@ -19,13 +19,18 @@ import { divideBothSides } from "./actions/divideBothSides";
 import { timesBothSides } from "./actions/timesBothSides";
 import Slider from "./components/Slider";
 import { squareBothSides, squareRootBothSides } from "./actions/squaring";
-import { userState } from "./userState";
+import { levelInfo, userState } from "./userState";
 import { side_only_contains_squareRoot } from "./insights/side_only_contains_squareRoot";
 import { getDeviceType } from "./utils/Device";
 import { minusFromBothSides } from "./actions/minusFromBothSides";
 import { Portal } from "solid-js/web";
 import SquaredDisplay from "./components/MathExpression";
 import SquareRootDisplay from "./components/SquareRootDisplay";
+import ConfettiCelebration from "./components/celebration";
+import profile_image from "./assets/profile.jpg";
+import { ProfileCard } from "./components/ProfileCard";
+import { InfoCard } from "./InfoCard";
+import { LevelInfo } from "./components/LevelInfo";
 
 function Equation_Side_C(props: { side: Side }) {
   return <Expression isFullSide={true} side={() => props.side} />;
@@ -382,9 +387,15 @@ function QuestionDisplay() {
   let timesInputRef: undefined | HTMLInputElement = undefined;
   return (
     <>
-      <h1>Interactive Equation Solver</h1>
 
-      <div id={styles.main_question} class={styles.question}>
+      <div id={styles.main_question} class={styles.question}
+        style={{
+          background: "white",
+          color: "black",
+          border: "1px solid black",
+          "margin-top": "10px",
+        }}
+      >
         <For each={state.previousPositions}>
           {(position: { lhs: Side; rhs: Side }) => (
             <div
@@ -408,49 +419,36 @@ function QuestionDisplay() {
           <Equation_Side_C side={state.currentEquation!.rhs} />
         </div>
       </div>
-
-      <Show when={needsDivision(state.currentEquation)}>
-        <div id={styles.forms}>
-          <form onsubmit={(e) => e.preventDefault()}>
-            divide both sides by <input ref={divideInputRef} type="number" />
-            <button
-              onclick={() => {
-                saveCurrentEquationPosition();
-                divideEntireSide(
-                  state.currentEquation!.lhs,
-                  parseInt(divideInputRef!.value)
-                );
-                divideEntireSide(
-                  state.currentEquation!.rhs,
-                  parseInt(divideInputRef!.value)
-                );
-              }}
-            >
-              submit
-            </button>
-          </form>
-          <form onsubmit={(e) => e.preventDefault()}>
-            times both sides by <input ref={timesInputRef} type="number" />
-            <button
-              onclick={() => {
-                saveCurrentEquationPosition();
-                timesEntireSide(
-                  state.currentEquation!.lhs,
-                  parseInt(timesInputRef!.value)
-                );
-                timesEntireSide(
-                  state.currentEquation!.rhs,
-                  parseInt(timesInputRef!.value)
-                );
-              }}
-            >
-              submit
-            </button>
-          </form>
-        </div>
-      </Show>
       <InfoDisplay />
-      <div class={styles['bottom-controls']}>
+    </>
+  );
+}
+
+
+function Moves(){
+  return(
+    <div id={styles.info}>
+        moves: {JSON.stringify(state.previousPositions.length)}{" "}
+        <button
+          control-action="u"
+          style={{
+            display: "inline-flex",
+            "align-items": "center",
+            gap: "4px",
+          }}
+          onclick={() => undo()}
+        >
+          <UndoArrow />
+          (ctrl + u)
+        </button>
+      </div>
+  )
+}
+
+
+function SwitchLevelControls(){
+  return(
+    <div class={styles['bottom-controls']}>
         <button
           plain-action="ArrowLeft"
           disabled={state.currentEquation_id < 1}
@@ -471,8 +469,7 @@ function QuestionDisplay() {
           next question (press →)
         </button>
       </div>
-    </>
-  );
+  )
 }
 
 const [ph, setPh] = createSignal(true);
@@ -486,45 +483,105 @@ createEffect(() => {
   state.previousPositions = [];
 });
 
+
+function EndOfLevel(){
+  const stars = Math.max(state.currentEquation!.fastest_route_to_answer - state.previousPositions.length+3, 0);
+
+
+  levelInfo[state.currentEquation_id].completed_in = state.previousPositions.length
+  levelInfo[state.currentEquation_id].stars = stars
+
+  return(
+    <>
+    <ConfettiCelebration>
+                <span
+                style={{
+                  "font-weight": "bold",
+                  position: "absolute",
+                  top: "-4%",
+                  right: "-4%",
+                  "font-size": "1.1em",
+                  border: "1px solid black",
+                  "border-top-left-radius": "4px",
+                  "border-bottom-right-radius": "4px",
+                  padding: "4px",
+                  // "box-shadow": "3px 6px 8px rgba(0, 0, 0, 0.15)",
+                  transform: "rotate(15deg)",
+                  background: "white",
+                }}
+                >{state.previousPositions.length} {state.previousPositions.length == 1 ? "move" : "moves"}</span>
+                <span>
+                  <For each={Array.from({ length: stars })}>
+                    {() => (
+                      <svg
+                        width="32px"
+                        height="32px"
+                        viewBox="0 0 24 24"
+                        fill="rgba(237, 244, 29, 0.93)"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                      </svg>
+                    )}
+                  </For>
+                </span>
+              </ConfettiCelebration>
+              <SwitchLevelControls />
+                </>
+  )
+}
+
 export default function App() {
   return (
     <>
-      <div
-        style={{
-          background: "black",
-          color: "white",
-          padding: "10px",
-          height: "200px",
-        }}
-      >
-        <h1>moves from the answer: </h1>
-        <Slider value={() => distanceToAnswer(state.currentEquation!)} />
+    <LevelInfo/>
+      <div id={styles.app}>
+        <h1>Interactive Equation Solver</h1>
+
+        <Show
+          when={distanceToAnswer(state.currentEquation!)}
+          fallback={
+            <>
+              <EndOfLevel/>
+            </>
+          }
+        >
+          <div
+            style={{
+              background: "black",
+              color: "white",
+              padding: "10px",
+              height: "200px",
+            }}
+          >
+            <h1>moves from the answer: </h1>
+            <Slider value={() => distanceToAnswer(state.currentEquation!)} />
+              
+          </div>
+        </Show>
+
+        {/* <pre style={{ width: "800px" }}>{JSON.stringify(state.currentEquation, undefined, 2)}</pre> */}
+        {ph() && QuestionDisplay()}
+        <Show
+          when={distanceToAnswer(state.currentEquation!)}>
+      <Moves />
+        </Show>
+
       </div>
 
-      {/* <pre style={{ width: "800px" }}>{JSON.stringify(state.currentEquation, undefined, 2)}</pre> */}
-      {ph() && QuestionDisplay()}
-    </>
-  );
+      <footer>
+      <InfoCard info="This game is a work in progress. The goal is to solve each equation by breaking it down into steps. The game will tell you how many steps you are from the answer. The game is currently only displaying the first couple of questions. The game will also not work if you go back to a question that you have already answered. The game will also not work if you undo a question and then try to go to the next question.">
+      <ProfileCard phone="+1 574-329-1927" name="shmuli keller" email="shmulikeller@gmail.com" image={profile_image}></ProfileCard>
+      </InfoCard>
+        
+      </footer>
+    </>);
 }
 
 function InfoDisplay() {
   return (
     <>
-      <div id={styles.info}>
-        moves: {JSON.stringify(state.previousPositions.length)}{" "}
-        <button
-          control-action="u"
-          style={{
-            display: "inline-flex",
-            "align-items": "center",
-            gap: "4px",
-          }}
-          onclick={() => undo()}
-        >
-          <UndoArrow />
-          (ctrl + u)
-        </button>
-      </div>
+      
       <div id={styles.info}>
         <span style={{ padding: "10px" }}>
           Question: {state.currentEquation_id + 1}/{equations.length}
@@ -536,3 +593,19 @@ function InfoDisplay() {
     </>
   );
 }
+
+
+
+
+
+
+export const difficulty_tag_colors = {
+  "Super Easy": "rgb(63, 223, 223)",
+  Easy: "rgb(223, 223, 63)",
+  Medium: "rgb(227, 141, 56)",
+  Hard: "rgb(208, 67, 67)",
+}
+
+
+
+

@@ -3,7 +3,7 @@ import solidPlugin from 'vite-plugin-solid';
 
 export default defineConfig({
   plugins: [solidPlugin()],
-  base: '/equation-solver /', // Replace with your GitHub repo name
+  base: '/', // Replace with your GitHub repo name
   server: {
     port: 3000,
   },

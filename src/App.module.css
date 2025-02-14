@@ -1,3 +1,10 @@
+#app{
+  width: 80vw;
+  padding-left: 10vw;
+  padding-right: 10vw;
+}
+
+
 .question {
   display: flex;
   justify-content: center;
@@ -88,7 +95,7 @@ form{
 }
 
 
-.control{
+/* .control{
       margin: 4px;
       padding: 10px;
       background-color: lightgreen;
@@ -96,7 +103,7 @@ form{
       transition: color .4s;
       border-radius: 10px;
       cursor: pointer;
-}
+} */
 
 
 button:disabled{
@@ -134,17 +141,20 @@ button:disabled{
 #forms{
       margin-top: 20px;
       padding: 10px;
-      background-color: black;
-      color: white;
+      background-color: white;
+      color: black;
+      border: 1px solid black;
       transition: color .4s;
-}
-
-
-#info{
+    }
+    
+    
+    #info{
       margin-top: 20px;
       padding: 10px;
-      background-color: black;
-      color: white;
+      background-color: white;
+      
+      border: 1px solid black;
+      color: black;
       transition: color .4s;
 }
 
@@ -159,7 +169,7 @@ button:disabled{
 
 
 body {
-  font-family: Arial, sans-serif;
+  font-family:'Times New Roman', Times, serif;
   background-color: #f4f4f9;
   margin: 0;
   padding: 20px;
@@ -191,9 +201,9 @@ span {
 }
 
 button {
-  background: lightgreen;
   
-  color: black;
+  background: #0b2c52;
+  color: rgb(255, 255, 255);
   border: none;
   padding: 8px 12px;
   border-radius: 5px;
@@ -224,11 +234,14 @@ input[type="number"] {
 }
 
 .bottom-controls {
-  background-color: black;
-  padding: 10px;
+  background-color: white;
+  padding: 16px;
   display: flex;
+  gap: 10px;
   justify-content: space-between;
   margin-top: 20px;
+  border: 1px solid black;
+
 }
 
 .control {

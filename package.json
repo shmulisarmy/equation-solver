@@ -8,8 +8,7 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-  "deploy": "gh-pages -d dist"
-
+    "deploy": "gh-pages -d dist"
   },
   "license": "MIT",
   "devDependencies": {
@@ -18,7 +17,7 @@
     "vite-plugin-solid": "^2.11.0"
   },
   "dependencies": {
+    "canvas-confetti": "^1.9.3",
     "solid-js": "^1.9.3"
   }
-
 }
