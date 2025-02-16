@@ -66,3 +66,21 @@ code {
     transition: 1s;
   }
 }
+
+
+
+@keyframes move {
+    from { 
+      transform: scale(.8) translate(var(--travel-x), var(--travel-y));
+    }
+}
+
+
+
+/* .level:nth-child(3n){ */
+
+  
+  .animo{
+    animation: move 1s;
+  }
+/* } */
