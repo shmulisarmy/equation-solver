@@ -1,14 +1,19 @@
 import { createSignal, For, Show } from "solid-js";
-import { difficulty_tag_colors } from "../../App";
 import { state } from "../../state";
 import { levelInfo } from "../../userState";
 import styles from "./.module.css";
 import { A } from "@solidjs/router";
-import Marquee from "../Marquee";
+import Marquee from "../../components/Marquee";
 
 const levelComponentWidth = 200;
-const unlockedLevelOpacity = 1;
-const lockedLevelOpacity = 0.4;
+const lockedLevelOpacity = 0.2;
+
+export const difficulty_tag_colors = {
+  "Super Easy": "yellowgreen",
+  Easy: "darkgreen",
+  Medium: "orange",
+  Hard: "red",
+};
 
 type Level = {
   number: number;
@@ -19,7 +24,7 @@ type Level = {
   stars?: number;
 };
 
-export const Levels = () => {
+export default function Levels_page (){
   return (
     <div>
       <h1
@@ -245,9 +250,10 @@ function SubExpressionsSvg({
         padding: "4px",
         border: "1px solid",
         "border-radius": "4px",
-        background: difficulty_tag_colors[level.difficulty],
-        "border-color": difficulty_tag_colors[level.difficulty],
-        opacity: lockedLevelOpacity,
+        color: difficulty_tag_colors[level.difficulty as keyof typeof difficulty_tag_colors],
+        // background: "black",
+        "border-color": difficulty_tag_colors[level.difficulty as keyof typeof difficulty_tag_colors],
+        opacity: level.locked ? lockedLevelOpacity : 1,
         // background: "rgb(3, 3, 3)",
         // color: level.locked ? 'rgba(0, 0, 0, 0.5)' : 'white',
         "font-size": "1em", // position: 'absolute',

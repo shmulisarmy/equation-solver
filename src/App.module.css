@@ -31,11 +31,7 @@ span {
 }
 
 
-.controls{
-  display: flex;
-  flex-direction: column;
-  width: fit-content;
-}
+
 
 span:has(button):after {
   content: '';
@@ -48,29 +44,7 @@ span:has(button):after {
   transform: translateX(-50%);
 }
 
-span .controls {
-  opacity: 0;
-  visibility: hidden;
-  position: absolute;
-  top: 120%;
-  right: -150%;
-  background-color: #ff8e8e;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
 
-
-
-span:focus{
-  background-color: darkcyan;
-.controls{
-  opacity: 1;
-  visibility: visible;
-}}
 
 
 span{
@@ -86,13 +60,7 @@ form{
       transition: color .4s;
 }
 
-.controls{
-      padding: 10px;
-      background-color: var(--background-color);
-      color: var(--color);
-      transition: color .4s;
-  background: black;
-}
+
 
 
 /* .control{
@@ -244,10 +212,7 @@ input[type="number"] {
 
 }
 
-.control {
-  padding: 10px 15px;
-  font-size: 16px;
-}
+
 
 
 
@@ -266,12 +231,9 @@ input[type="number"] {
 
 
 
-.arrow-box-parent{
-  position: relative;
-      svg {
-          position: absolute;
-          bottom: 100%;
-          right: 100%;
-          /* border: blue 2px solid; */
-          }
+
+.simplified-form{
+  svg{
+    display: none;
   }
+}

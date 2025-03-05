@@ -1,6 +1,6 @@
 import styles from "./.module.css";
 
-function Slider(props: { value: () => number }) {
+export function Slider(props: { value: () => number }) {
   const maxValue = 5;
 
   return (

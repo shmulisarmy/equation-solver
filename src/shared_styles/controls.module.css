@@ -1,0 +1,43 @@
+
+span .controls {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    top: 120%;
+    right: -150%;
+    background-color: #ff8e8e;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  
+  
+  span:focus{
+    background-color: darkcyan;
+  .controls{
+    opacity: 1;
+    visibility: visible;
+  }}
+
+  .control {
+    padding: 10px 15px;
+    font-size: 16px;
+  }
+
+  .controls{
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+  }
+
+  .controls{
+    padding: 10px;
+    background-color: var(--background-color);
+    color: var(--color);
+    transition: color .4s;
+background: black;
+}

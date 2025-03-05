@@ -6,7 +6,6 @@ Project Description
 
 ### Maybe
 
-- [ ] make the user a simple goal of simplifieing the equation  
 - [ ] fix moves- left estimator  
 - [ ] drag any number on top of another number to see the biggest common denomiator  
 - [ ] mutiple varibles  
@@ -20,6 +19,7 @@ Project Description
 
 ### Done ✓
 
+- [x] make the user a simple goal of simplifieing the equation  
 - [x] user hints  
 - [x] work on display  
 - [x] subexpressions  

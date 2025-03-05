@@ -1,0 +1,9 @@
+.arrow-box-parent{
+    position: relative;
+        svg {
+            position: absolute;
+            bottom: 100%;
+            right: 100%;
+            /* border: blue 2px solid; */
+            }
+    }

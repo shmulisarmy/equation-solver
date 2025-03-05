@@ -18,28 +18,10 @@ code {
 
 .flex {
   display: flex;
-}
-
-.justify-center {
   justify-content: center;
-}
-
-.align-center {
   align-items: center;
 }
 
-.justify-between {
-  justify-content: space-between;
-}
-
-.flex-column {
-  flex-direction: column;
-}
-
-
-.gap-1 {
-  gap: 1rem;
-}
 
 
 
@@ -77,10 +59,8 @@ code {
 
 
 
-/* .level:nth-child(3n){ */
 
   
   .animo{
     animation: move 1s;
   }
-/* } */
