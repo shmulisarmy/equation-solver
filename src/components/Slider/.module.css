@@ -1,0 +1,84 @@
+.container {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Horizontal layout with a game-like feel */
+.sliderContainer {
+  position: relative;
+  width: 350px;
+  margin: 20px auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* Styling for the slider */
+.slider {
+  width: 100%;
+  appearance: none;
+  height: 8px;
+  background: linear-gradient(90deg, #4CAF50 0%, #FF9800 100%);
+  border-radius: 10px;
+  outline: none;
+  transition: background 0.3s ease-in-out;
+}
+
+/* Slider thumb */
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  background: #FF9800;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* Tick marks */
+.tickMarks {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  position: absolute;
+  top: 50px;
+}
+
+.tick {
+  font-size: 16px;
+  font-weight: bold;
+  color: #555;
+  text-align: center;
+  transition: color 0.3s ease-in-out, transform 0.3s;
+}
+
+/* Active tick */
+.tick.active {
+  color: #FF9800;
+  transform: scale(1.5);
+}
+
+/* Vertical Mode - Uncomment if you want a vertical slider instead */
+/*
+.sliderContainer {
+  flex-direction: column;
+}
+
+.slider {
+  width: 8px;
+  height: 200px;
+  writing-mode: bt-lr;
+}
+
+.tickMarks {
+  flex-direction: column;
+  height: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+*/

@@ -1,0 +1,10 @@
+@keyframes move {
+    from {
+      transform: translate(var(--travel-x), var(--travel-y));
+    }
+  }
+  
+  .animo {
+    animation: move 1s;
+  }
+  
