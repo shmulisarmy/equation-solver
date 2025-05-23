@@ -352,13 +352,14 @@ export default function App() {
   return (
     <>
     <Router>
+        <Route path="/" component={Levels_page} />
         <Route path="/levels" component={Levels_page} />
         <Route path="/question/:questionNumber" component={Question_page} />
         <Route path="*" component={() => <>404</>} /> {/* Catch-all for 404 */}
     </Router>
       <footer>
       <InfoCard info="This game is a work in progress. The goal is to solve each equation by breaking it down into steps. The game will tell you how many steps you are from the answer. The game is currently only displaying the first couple of questions. The game will also not work if you go back to a question that you have already answered. The game will also not work if you undo a question and then try to go to the next question.">
-      <ProfileCard phone="+1 574-329-1927" name="shmuli keller" email="shmulikeller@gmail.com" image={profile_image}></ProfileCard>
+      <ProfileCard phone="+1 574-329-1927" name="shmuli keller" email="" image="https://shmulisarmy.github.io/resume/images/profile.png"></ProfileCard>
       </InfoCard>
         
       </footer>

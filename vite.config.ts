@@ -9,7 +9,7 @@ export default defineConfig({
     },
   },
   plugins: [solidPlugin()],
-  base: '/', // Replace with your GitHub repo name
+  base: '/equation-solver/', // Replace with your GitHub repo name
   server: {
     port: 3000,
   },
